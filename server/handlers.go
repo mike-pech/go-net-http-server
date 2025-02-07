@@ -30,8 +30,16 @@ func postDirector(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&director)
 	if err != nil {
 		w.WriteHeader(400)
-		w.Write([]byte("Error in PostDirector handler\n"))
-		log.Printf("Error in PostDirector handler \n%s", err)
+		w.Write([]byte("Error in postDirector handler\n"))
+		log.Printf("Error in postDirector handler \n%s", err)
+		return
+	}
+
+	err = validate.Struct(director)
+	if err != nil {
+		w.WriteHeader(422)
+		w.Write([]byte("Error in postDirector handler \n" + err.Error()))
+		log.Printf("Error in postDirector handler \n%s", err)
 		return
 	}
 
@@ -144,6 +152,14 @@ func patchDirector(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = validate.Struct(director)
+	if err != nil {
+		w.WriteHeader(422)
+		w.Write([]byte("Error in patchDirector handler \n" + err.Error()))
+		log.Printf("Error in patchDirector handler \n%s", err)
+		return
+	}
+
 	updDirector, err := operations.UpdateDirector(director)
 	if err == pgx.ErrNoRows {
 		w.WriteHeader(404)
@@ -211,8 +227,16 @@ func postActor(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&actor)
 	if err != nil {
 		w.WriteHeader(400)
-		w.Write([]byte("Error in PostActor handler\n"))
-		log.Printf("Error in PostActor handler \n%s", err)
+		w.Write([]byte("Error in postActor handler\n"))
+		log.Printf("Error in postActor handler \n%s", err)
+		return
+	}
+
+	err = validate.Struct(actor)
+	if err != nil {
+		w.WriteHeader(422)
+		w.Write([]byte("Error in postActor handler \n" + err.Error()))
+		log.Printf("Error in postActor handler \n%s", err)
 		return
 	}
 
@@ -325,6 +349,14 @@ func patchActor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = validate.Struct(actor)
+	if err != nil {
+		w.WriteHeader(422)
+		w.Write([]byte("Error in patchActor handler \n" + err.Error()))
+		log.Printf("Error in patchActor handler \n%s", err)
+		return
+	}
+
 	updActor, err := operations.UpdateActor(actor)
 	if err == pgx.ErrNoRows {
 		w.WriteHeader(404)
@@ -392,8 +424,16 @@ func postFilm(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&film)
 	if err != nil {
 		w.WriteHeader(400)
-		w.Write([]byte("Error in PostFilm handler\n"))
-		log.Printf("Error in PostFilm handler \n%s", err)
+		w.Write([]byte("Error in postFilm handler\n"))
+		log.Printf("Error in postFilm handler \n%s", err)
+		return
+	}
+
+	err = validate.Struct(film)
+	if err != nil {
+		w.WriteHeader(422)
+		w.Write([]byte("Error in postFilm handler \n" + err.Error()))
+		log.Printf("Error in postFilm handler \n%s", err)
 		return
 	}
 
@@ -506,6 +546,14 @@ func patchFilm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = validate.Struct(film)
+	if err != nil {
+		w.WriteHeader(422)
+		w.Write([]byte("Error in patchFilm handler \n" + err.Error()))
+		log.Printf("Error in patchFilm handler \n%s", err)
+		return
+	}
+
 	updFilm, err := operations.UpdateFilm(film)
 	if err == pgx.ErrNoRows {
 		w.WriteHeader(404)
@@ -573,8 +621,16 @@ func postCharacter(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&character)
 	if err != nil {
 		w.WriteHeader(400)
-		w.Write([]byte("Error in PostCharacter handler\n"))
-		log.Printf("Error in PostCharacter handler \n%s", err)
+		w.Write([]byte("Error in postCharacter handler\n"))
+		log.Printf("Error in postCharacter handler \n%s", err)
+		return
+	}
+
+	err = validate.Struct(character)
+	if err != nil {
+		w.WriteHeader(422)
+		w.Write([]byte("Error in postCharacter handler \n" + err.Error()))
+		log.Printf("Error in postCharacter handler \n%s", err)
 		return
 	}
 
@@ -720,6 +776,14 @@ func patchCharacter(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(400)
 		w.Write([]byte("Error in patchCharacter handler\n"))
+		log.Printf("Error in patchCharacter handler \n%s", err)
+		return
+	}
+
+	err = validate.Struct(character)
+	if err != nil {
+		w.WriteHeader(422)
+		w.Write([]byte("Error in patchCharacter handler \n" + err.Error()))
 		log.Printf("Error in patchCharacter handler \n%s", err)
 		return
 	}

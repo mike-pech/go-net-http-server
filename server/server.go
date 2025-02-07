@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/swaggo/http-swagger"
 
 	_ "go-test/docs"
@@ -10,6 +11,8 @@ import (
 	"net/http"
 	"time"
 )
+
+var validate *validator.Validate
 
 func Setup(host string) {
 	router := http.NewServeMux()
@@ -39,13 +42,6 @@ func Setup(host string) {
 	router.HandleFunc("PATCH /characters/", patchCharacter)
 	router.HandleFunc("DELETE /characters/{id}", deleteCharacter)
 
-	stack := middleware.CreateStack(
-		middleware.Logging,
-		// middleware.AllowCors,
-		// middleware.IsAuthed,
-		// middleware.CheckPermissions,
-	)
-
 	router.HandleFunc("GET /docs/", httpSwagger.Handler(
 		httpSwagger.URL("/docs/doc.json"),
 		httpSwagger.UIConfig(map[string]string{
@@ -53,6 +49,15 @@ func Setup(host string) {
 			"defaultModelsExpandDepth": "3",
 		}),
 	))
+
+	validate = validator.New(validator.WithRequiredStructEnabled())
+
+	stack := middleware.CreateStack(
+		middleware.Logging,
+		// middleware.AllowCors,
+		// middleware.IsAuthed,
+		// middleware.CheckPermissions,
+	)
 
 	server := http.Server{
 		Addr:              host,
