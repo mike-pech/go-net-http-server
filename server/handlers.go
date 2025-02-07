@@ -9,6 +9,22 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+type ResponseHTTP struct {
+	Success bool        `json:"success"`
+	Data    interface{} `json:"data"`
+	Message string      `json:"message"`
+}
+
+// @Summary	Creates a new director record.
+// @Tags		Directors
+// @Accept		application/json
+// @Produce	application/json
+// @Param		Director	body		database.Director	true	"Create Director record"
+// @Success	200		{object}	ResponseHTTP{data=database.Director}
+// @Failure	400		{object}	ResponseHTTP{}
+// @Failure	418		{object}	ResponseHTTP{}
+// @Failure	500		{object}	ResponseHTTP{}
+// @Router		/directors/ [post]
 func postDirector(w http.ResponseWriter, r *http.Request) {
 	var director operations.Director
 	err := json.NewDecoder(r.Body).Decode(&director)
@@ -37,6 +53,16 @@ func postDirector(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Summary	Fetches director record by id.
+// @Tags		Directors
+// @Accept		application/json
+// @Produce	application/json
+// @Param		id	path		string	true	"Get a director record by ID"
+// @Success	200		{object}	ResponseHTTP{data=database.Director}
+// @Failure	400		{object}	ResponseHTTP{}
+// @Failure	418		{object}	ResponseHTTP{}
+// @Failure	500		{object}	ResponseHTTP{}
+// @Router		/directors/{id} [get]
 func getDirectorById(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 
@@ -64,6 +90,15 @@ func getDirectorById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Summary	Fetches all directors.
+// @Tags		Directors
+// @Accept		application/json
+// @Produce	application/json
+// @Success	200		{object}	ResponseHTTP{data=database.Director}
+// @Failure	400		{object}	ResponseHTTP{}
+// @Failure	418		{object}	ResponseHTTP{}
+// @Failure	500		{object}	ResponseHTTP{}
+// @Router		/directors/ [get]
 func getDirectors(w http.ResponseWriter, r *http.Request) {
 	director, err := operations.FindDirectors()
 	if err == pgx.ErrNoRows {
@@ -89,6 +124,16 @@ func getDirectors(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Summary	Updates a Director record.
+// @Tags		Directors
+// @Accept		application/json
+// @Produce	application/json
+// @Param		Director	body		database.Director	true	"Update Director record"
+// @Success	200		{object}	ResponseHTTP{data=database.Director}
+// @Failure	400		{object}	ResponseHTTP{}
+// @Failure	418		{object}	ResponseHTTP{}
+// @Failure	500		{object}	ResponseHTTP{}
+// @Router		/directors/ [patch]
 func patchDirector(w http.ResponseWriter, r *http.Request) {
 	var director operations.Director
 	err := json.NewDecoder(r.Body).Decode(&director)
@@ -123,6 +168,16 @@ func patchDirector(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Summary	Updates a Director record.
+// @Tags		Directors
+// @Accept		application/json
+// @Produce	application/json
+// @Param		id	path		string	true	"Delete a director record by ID"
+// @Success	200		{object}	ResponseHTTP{data=database.Director}
+// @Failure	400		{object}	ResponseHTTP{}
+// @Failure	418		{object}	ResponseHTTP{}
+// @Failure	500		{object}	ResponseHTTP{}
+// @Router		/directors/{id} [delete]
 func deleteDirector(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 

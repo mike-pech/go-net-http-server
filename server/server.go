@@ -1,6 +1,9 @@
 package server
 
 import (
+	"github.com/swaggo/http-swagger"
+
+	_ "go-test/docs"
 	"go-test/middleware"
 
 	"log"
@@ -22,6 +25,14 @@ func Setup(host string) {
 		// middleware.IsAuthed,
 		// middleware.CheckPermissions,
 	)
+
+	router.HandleFunc("GET /docs/", httpSwagger.Handler(
+		httpSwagger.URL("/docs/doc.json"),
+		httpSwagger.UIConfig(map[string]string{
+			"defaultModelRendering":    `"example"`,
+			"defaultModelsExpandDepth": "3",
+		}),
+	))
 
 	server := http.Server{
 		Addr:              host,

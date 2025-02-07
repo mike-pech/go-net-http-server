@@ -26,6 +26,12 @@ func getDsn() string {
 	return dsn
 }
 
+// @title			Movie Database
+// @version		1.0
+// @description	A backend for a Movie Database
+// @contact.name	Mikhail Pecherkin
+// @contact.email	m.pecherkin.sas@gmail.com
+// @BasePath		/
 func main() {
 	database.SetupDB(getDsn())
 	server.Setup(os.Getenv("HOST"))
