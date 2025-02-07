@@ -1,44 +1,38 @@
 package main
 
 import (
-	"go-test/latest/middleware"
+	"fmt"
+	"go-test/database"
+	"go-test/server"
 	"log"
-	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
-func findByID(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	w.Write([]byte("recieved request for item: " + id + "\n"))
-}
-
-
-func coolest(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Getting the coolest!\n"))
-}
-
-
-func main() {
-	router := http.NewServeMux()
-	router.HandleFunc("GET /item/{id}", findByID)
-	router.HandleFunc("POST /item/{id}", findByID)
-	router.HandleFunc("DELETE /item/{id}", findByID)
-	router.HandleFunc("GET godotglobes.su/cool", coolest)
-
-	v1 := http.NewServeMux()
-	v1.Handle("/v1/", http.StripPrefix("/v1", router))
-
-	stack := middleware.CreateStack(
-		middleware.Logging,
-		// middleware.AllowCors,
-		// middleware.IsAuthed,
-		// middleware.CheckPermissions,
-		// Examples
-	)
-
-	server := http.Server{
-		Addr:		":8080",
-		Handler:	stack(router),
+func getDsn() string {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
 	}
-	log.Println("Starting server on port :8080")
-	server.ListenAndServe()
+	dsn := fmt.Sprintf(
+		"postgres://%s:%s@%s:%s/%s",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
+		os.Getenv("DB_NAME"),
+	)
+	return dsn
+}
+
+// @title			Movie Database
+// @version		1.0
+// @description	A backend for a Movie Database
+// @contact.name	Mikhail Pecherkin
+// @contact.email	m.pecherkin.sas@gmail.com
+// @BasePath		/
+func main() {
+	database.SetupDB(getDsn())
+	server.Setup(os.Getenv("HOST"))
 }

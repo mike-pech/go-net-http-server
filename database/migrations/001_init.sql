@@ -1,0 +1,36 @@
+CREATE TABLE directors(
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  first_name VARCHAR NOT NULL,
+  middle_name VARCHAR,
+  last_name VARCHAR NOT NULL
+);
+
+CREATE TABLE actors(
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  first_name VARCHAR NOT NULL,
+  middle_name VARCHAR,
+  last_name VARCHAR NOT NULL
+);
+
+CREATE TABLE films(
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  title VARCHAR NOT NULL,
+  directed_by INT NOT NULL REFERENCES directors ON DELETE RESTRICT,
+  logline VARCHAR NOT NULL,
+  year INT NOT NULL
+);
+
+CREATE TABLE characters(
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR NOT NULL,
+  portrayed_by INT NOT NULL REFERENCES actors ON DELETE RESTRICT,
+  featured_in INT NOT NULL  REFERENCES films ON DELETE RESTRICT,
+  dies_in_the_end BOOLEAN DEFAULT(false)
+);
+
+---- create above / drop below ----
+
+DROP TABLE directors;
+DROP TABLE actors;
+DROP TABLE characters;
+DROP TABLE films;
