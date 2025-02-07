@@ -13,11 +13,31 @@ import (
 
 func Setup(host string) {
 	router := http.NewServeMux()
+
 	router.HandleFunc("POST /directors/", postDirector)
 	router.HandleFunc("GET /directors/{id}", getDirectorById)
 	router.HandleFunc("GET /directors/", getDirectors)
 	router.HandleFunc("PATCH /directors/", patchDirector)
 	router.HandleFunc("DELETE /directors/{id}", deleteDirector)
+
+	router.HandleFunc("POST /actors/", postActor)
+	router.HandleFunc("GET /actors/{id}", getActorById)
+	router.HandleFunc("GET /actors/", getActors)
+	router.HandleFunc("PATCH /actors/", patchActor)
+	router.HandleFunc("DELETE /actors/{id}", deleteActor)
+
+	router.HandleFunc("POST /films/", postFilm)
+	router.HandleFunc("GET /films/{id}", getFilmById)
+	router.HandleFunc("GET /films/", getFilms)
+	router.HandleFunc("PATCH /films/", patchFilm)
+	router.HandleFunc("DELETE /films/{id}", deleteFilm)
+
+	router.HandleFunc("POST /characters/", postCharacter)
+	router.HandleFunc("GET /characters/{id}", getCharacterById)
+	router.HandleFunc("GET /filmCharacters/{filmId}", getCharacterByFilmId)
+	router.HandleFunc("GET /characters/", getCharacters)
+	router.HandleFunc("PATCH /characters/", patchCharacter)
+	router.HandleFunc("DELETE /characters/{id}", deleteCharacter)
 
 	stack := middleware.CreateStack(
 		middleware.Logging,
